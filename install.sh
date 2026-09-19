@@ -41,7 +41,7 @@ stow_packages() {
   for package in "${DOTFILES_DIR}"/*/; do
     package="$(basename "${package}")"
     echo "Stowing '${package}' -> ${TARGET_DIR}"
-    stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --restow "${package}"
+    stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow "${package}"
   done
 }
 
