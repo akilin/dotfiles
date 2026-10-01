@@ -7,9 +7,6 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${HOME}"
 
-# Packages that are not stowed because they need custom install logic.
-NON_STOW_PACKAGES=(claude)
-
 ensure_installed() {
   local pkg="$1"
   if command -v "${pkg}" >/dev/null 2>&1; then
@@ -44,11 +41,11 @@ stow_packages() {
   local package
   for package in "${DOTFILES_DIR}"/*/; do
     package="$(basename "${package}")"
-    if [[ " ${NON_STOW_PACKAGES[*]} " == *" ${package} "* ]]; then
-      continue
-    fi
+    local ignore=()
+    # claude/settings.json is merged by merge_claude_settings, not symlinked.
+    [ "${package}" = claude ] && ignore=(--ignore='^/settings\.json')
     echo "Stowing '${package}' -> ${TARGET_DIR}"
-    stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow "${package}"
+    stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow ${ignore[@]+"${ignore[@]}"} "${package}"
   done
 }
 
