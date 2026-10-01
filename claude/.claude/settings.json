@@ -1,0 +1,42 @@
+{
+    "attribution": false,
+    "autoMemoryEnabled": false,
+    "disableArtifact": true,
+    "disableBundledSkills": true,
+    "disableClaudeAiConnectors": true,
+    "disableWorkflows": true,
+    "permissions": {
+        "deny": [
+            "CronCreate",
+            "CronDelete",
+            "CronList",
+            "DesignSync",
+            "EnterPlanMode",
+            "ExitPlanMode",
+            "NotebookEdit",
+            "PushNotification",
+            "RemoteTrigger",
+            "ReportFindings",
+            "ScheduleWakeup",
+            "SendFeedback"
+        ]
+    },
+    "promptSuggestionEnabled": false,
+    "skillOverrides": {
+        "anthropic-skills:docs": "off",
+        "anthropic-skills:docx": "off",
+        "anthropic-skills:google-workspace": "off",
+        "anthropic-skills:import-memory": "off",
+        "anthropic-skills:morning": "off",
+        "anthropic-skills:pdf": "off",
+        "anthropic-skills:pptx": "off",
+        "anthropic-skills:skill-creator": "off",
+        "anthropic-skills:xlsx": "off"
+    },
+    "spinnerVerbs": {
+        "mode": "replace",
+        "verbs": [
+            "Working"
+        ]
+    }
+}
