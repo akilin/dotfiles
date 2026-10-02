@@ -43,22 +43,49 @@ right="$model"
 
 five=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 week=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+five_reset=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+week_reset=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 
-# add_limit PCT: append to limits (plain) and limits_c (red if over 90%)
+# fmt_until RESETS_AT: time left until reset, at most two units, e.g. 1d19h, 2h33m, 15m45s, 45s
+# accepts epoch seconds or an ISO-8601 timestamp
+fmt_until() {
+  [ -z "$1" ] && return
+  local target left d h m s
+  if [[ "$1" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    target=${1%.*}
+  else
+    target=$(date -d "$1" +%s 2>/dev/null) || return
+  fi
+  left=$((target - $(date +%s)))
+  [ "$left" -lt 0 ] && left=0
+  d=$((left / 86400)) h=$((left % 86400 / 3600)) m=$((left % 3600 / 60)) s=$((left % 60))
+  if   [ "$d" -gt 0 ]; then printf '%dd%dh' "$d" "$h"
+  elif [ "$h" -gt 0 ]; then printf '%dh%dm' "$h" "$m"
+  elif [ "$m" -gt 0 ]; then printf '%dm%ds' "$m" "$s"
+  else printf '%ds' "$s"
+  fi
+}
+
+# add_limit PCT RESETS_AT: append to limits (plain) and limits_c (red at 90% or more);
+# at 90% or more also shows time until reset
 limits=""
 limits_c=""
 add_limit() {
   [ -z "$1" ] && return
-  local pct lim lim_c
+  local pct lim lim_c until
   pct=$(printf '%.0f' "$1")
   lim="${pct}%"
   lim_c=$lim
-  [ "$pct" -gt 90 ] && lim_c="${RED}${lim}${RESET}"
+  if [ "$pct" -ge 90 ]; then
+    until=$(fmt_until "$2")
+    [ -n "$until" ] && lim="$lim ($until)"
+    lim_c="${RED}${lim}${RESET}"
+  fi
   limits="${limits:+$limits | }$lim"
   limits_c="${limits_c:+$limits_c | }$lim_c"
 }
-add_limit "$five"
-add_limit "$week"
+add_limit "$five" "$five_reset"
+add_limit "$week" "$week_reset"
 
 right_c=$right
 if [ -n "$limits" ]; then
