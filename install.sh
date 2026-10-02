@@ -43,7 +43,7 @@ stow_packages() {
     package="$(basename "${package}")"
     local ignore=()
     # claude/settings.json is merged by merge_claude_settings, not symlinked.
-    [ "${package}" = claude ] && ignore=(--ignore='^/settings\.json')
+    [ "${package}" = claude ] && ignore=(--ignore='^settings\.json')
     echo "Stowing '${package}' -> ${TARGET_DIR}"
     stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow ${ignore[@]+"${ignore[@]}"} "${package}"
   done
