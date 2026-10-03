@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Entry point for VS Code devcontainer "dotfiles" feature.
 # Ensures GNU Stow and jq are available, symlinks every package folder in this
-# repo (e.g. "bash") into $HOME using stow, and merges Claude settings.
+# repo (e.g. "bash") into $HOME using stow, merges Claude settings, and
+# installs Claude plugins when the claude CLI is present.
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -67,7 +68,22 @@ merge_claude_settings() {
   printf '%s\n' "${merged}" > "${target}"
 }
 
+# Skipped when the claude CLI isn't installed; failures warn but don't abort.
+install_claude_plugins() {
+  if ! command -v claude >/dev/null 2>&1; then
+    echo "claude not found, skipping plugin install"
+    return 0
+  fi
+
+  echo "Installing Claude plugins"
+  claude plugin marketplace add akilin/claude-plugins \
+    || echo "Warning: failed to add marketplace akilin/claude-plugins" >&2
+  claude plugin install better-tool-rows@akilin-plugins \
+    || echo "Warning: failed to install better-tool-rows@akilin-plugins" >&2
+}
+
 ensure_installed stow
 ensure_installed jq
 stow_packages
 merge_claude_settings
+install_claude_plugins
