@@ -1,2 +1,5 @@
 # Case-insensitive tab completion
 set completion-ignore-case on
+
+# Disable the terminal bell
+set bell-style none
