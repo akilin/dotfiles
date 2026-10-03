@@ -24,7 +24,9 @@
             "CronList",
             "DesignSync",
             "EnterPlanMode",
+            "EnterWorktree",
             "ExitPlanMode",
+            "ExitWorktree",
             "NotebookEdit",
             "PushNotification",
             "RemoteTrigger",
@@ -43,7 +45,8 @@
         "anthropic-skills:pdf": "off",
         "anthropic-skills:pptx": "off",
         "anthropic-skills:skill-creator": "off",
-        "anthropic-skills:xlsx": "off"
+        "anthropic-skills:xlsx": "off",
+        "plugin-authoring": "off"
     },
     "spinnerVerbs": {
         "mode": "replace",
@@ -54,5 +57,8 @@
     "statusLine": {
         "type": "command",
         "command": "bash ~/.claude/statusline-command.sh"
+    },
+    "worktree": {
+        "bgIsolation": "none"
     }
 }
