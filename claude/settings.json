@@ -5,6 +5,9 @@
     "disableBundledSkills": true,
     "disableClaudeAiConnectors": true,
     "disableWorkflows": true,
+    "enabledPlugins": {
+        "plugin-authoring@builtin": false
+    },
     "hooks": {
         "Stop": [
             {
@@ -45,8 +48,7 @@
         "anthropic-skills:pdf": "off",
         "anthropic-skills:pptx": "off",
         "anthropic-skills:skill-creator": "off",
-        "anthropic-skills:xlsx": "off",
-        "plugin-authoring": "off"
+        "anthropic-skills:xlsx": "off"
     },
     "spinnerVerbs": {
         "mode": "replace",
