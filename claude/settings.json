@@ -6,7 +6,17 @@
     "disableClaudeAiConnectors": true,
     "disableWorkflows": true,
     "enabledPlugins": {
+        "better-tool-rows@akilin-plugins": true,
         "plugin-authoring@builtin": false
+    },
+    "extraKnownMarketplaces": {
+        "akilin-plugins": {
+            "source": {
+                "source": "github",
+                "repo": "akilin/claude-plugins"
+            },
+            "autoUpdate": true
+        }
     },
     "hooks": {
         "Stop": [
