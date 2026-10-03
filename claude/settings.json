@@ -60,6 +60,7 @@
         "anthropic-skills:skill-creator": "off",
         "anthropic-skills:xlsx": "off"
     },
+    "spinnerTipsEnabled": false,
     "spinnerVerbs": {
         "mode": "replace",
         "verbs": [
