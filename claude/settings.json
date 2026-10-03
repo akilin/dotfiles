@@ -5,6 +5,18 @@
     "disableBundledSkills": true,
     "disableClaudeAiConnectors": true,
     "disableWorkflows": true,
+    "hooks": {
+        "Stop": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "sh ~/.claude/bell.sh"
+                    }
+                ]
+            }
+        ]
+    },
     "permissions": {
         "deny": [
             "CronCreate",
