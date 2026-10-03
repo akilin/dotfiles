@@ -66,8 +66,8 @@ fmt_until() {
   fi
 }
 
-# add_limit PCT RESETS_AT: append usage and time until reset to limits (plain)
-# and limits_c (red at 90% or more)
+# add_limit PCT RESETS_AT: append to limits (plain) and limits_c (red at 90% or more);
+# at 90% or more also shows time until reset
 limits=""
 limits_c=""
 add_limit() {
@@ -75,10 +75,10 @@ add_limit() {
   local pct lim lim_c until
   pct=$(printf '%.0f' "$1")
   lim="${pct}%"
-  until=$(fmt_until "$2")
-  [ -n "$until" ] && lim="$lim ($until)"
   lim_c=$lim
   if [ "$pct" -ge 90 ]; then
+    until=$(fmt_until "$2")
+    [ -n "$until" ] && lim="$lim ($until)"
     lim_c="${RED}${lim}${RESET}"
   fi
   limits="${limits:+$limits | }$lim"
