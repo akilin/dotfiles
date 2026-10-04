@@ -72,6 +72,7 @@
         "type": "command",
         "command": "bash ~/.claude/statusline-command.sh"
     },
+    "theme": "dark",
     "worktree": {
         "bgIsolation": "none"
     }
