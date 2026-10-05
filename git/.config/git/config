@@ -1,0 +1,24 @@
+[user]
+	name = akilin
+[init]
+	defaultBranch = main
+[merge]
+	autoEdit = no
+	conflictStyle = diff3
+[diff]
+	renames = copies
+	algorithm = histogram
+[branch]
+	autoSetupMerge = always
+	sort = -committerdate
+[push]
+	autoSetupRemote = true
+[advice]
+	statusHints = false
+[alias]
+	co = checkout
+	ci = commit
+	br = branch
+	st = status -s
+	# Commit everything and push; pull only if the push is rejected.
+	sync = "!f() { git add -A && git commit -m \"$1\" && (git push || (git pull --no-edit && git push)); }; f"
