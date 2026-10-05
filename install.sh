@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # Entry point for VS Code devcontainer "dotfiles" feature.
 # Ensures GNU Stow and jq are available, symlinks every package folder in this
-# repo (e.g. "bash") into $HOME using stow, and merges Claude settings.
+# repo (e.g. "bash") into $HOME using stow, and sets up Claude's config dir.
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${HOME}"
+# Same rules as Claude: CLAUDE_CONFIG_DIR holds settings.json and .claude.json when set.
+CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-${HOME}/.claude}"
+CLAUDE_GLOBAL_CONFIG="${CLAUDE_CONFIG_DIR:-${HOME}}/.claude.json"
 
 ensure_installed() {
   local pkg="$1"
@@ -41,19 +44,25 @@ stow_packages() {
   local package
   for package in "${DOTFILES_DIR}"/*/; do
     package="$(basename "${package}")"
-    local ignore=()
-    # claude/settings.json is merged by merge_claude_settings, not symlinked.
-    [ "${package}" = claude ] && ignore=(--ignore='^settings\.json')
+    # claude goes to Claude's config dir, see stow_claude_files.
+    [ "${package}" = claude ] && continue
     echo "Stowing '${package}' -> ${TARGET_DIR}"
-    stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow ${ignore[@]+"${ignore[@]}"} "${package}"
+    stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow "${package}"
   done
 }
 
-# Claude rewrites its settings file at runtime, so merge instead of symlinking.
+# Only claude/.claude is linked; the json files next to it are merged below.
+stow_claude_files() {
+  mkdir -p "${CLAUDE_DIR}"
+  echo "Stowing 'claude/.claude' -> ${CLAUDE_DIR}"
+  stow --dir="${DOTFILES_DIR}/claude" --target="${CLAUDE_DIR}" --no-folding --restow .claude
+}
+
+# Claude rewrites both files at runtime, so merge instead of symlinking.
 # Repo values win; arrays defined in the repo replace existing ones.
-merge_claude_settings() {
-  local base="${DOTFILES_DIR}/claude/settings.json"
-  local target="${TARGET_DIR}/.claude/settings.json"
+merge_json() {
+  local base="$1"
+  local target="$2"
   local current='{}'
 
   mkdir -p "$(dirname "${target}")"
@@ -70,4 +79,6 @@ merge_claude_settings() {
 ensure_installed stow
 ensure_installed jq
 stow_packages
-merge_claude_settings
+stow_claude_files
+merge_json "${DOTFILES_DIR}/claude/settings.json" "${CLAUDE_DIR}/settings.json"
+merge_json "${DOTFILES_DIR}/claude/claude.json" "${CLAUDE_GLOBAL_CONFIG}"

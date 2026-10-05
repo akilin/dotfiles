@@ -19,18 +19,6 @@
             "autoUpdate": true
         }
     },
-    "hooks": {
-        "Stop": [
-            {
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "sh ~/.claude/bell.sh"
-                    }
-                ]
-            }
-        ]
-    },
     "modelSettings": {
         "claude-opus-5-5": {
             "effortLevel": "high"
@@ -57,6 +45,7 @@
             "SendFeedback"
         ]
     },
+    "preferredNotifChannel": "ghostty",
     "promptSuggestionEnabled": false,
     "skillOverrides": {
         "anthropic-skills:docs": "off",
