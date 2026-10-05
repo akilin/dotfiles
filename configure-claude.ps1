@@ -1,12 +1,14 @@
 #Requires -Version 7
 # Windows counterpart of install.sh, limited to Claude Code.
-# Links every file under claude/.claude into ~/.claude (copies instead when
-# symlinks aren't allowed, i.e. no admin / Developer Mode) and merges
-# claude/settings.json into ~/.claude/settings.json.
+# Links every file under claude/.claude into Claude's config dir (copies instead
+# when symlinks aren't allowed, i.e. no admin / Developer Mode) and merges
+# claude/settings.json and claude/claude.json into settings.json and .claude.json.
 $ErrorActionPreference = 'Stop'
 
 $DotfilesDir = $PSScriptRoot
-$TargetDir = Join-Path $HOME '.claude'
+# Same rules as Claude: CLAUDE_CONFIG_DIR holds settings.json and .claude.json when set.
+$TargetDir = $env:CLAUDE_CONFIG_DIR ?? (Join-Path $HOME '.claude')
+$GlobalConfig = Join-Path ($env:CLAUDE_CONFIG_DIR ?? $HOME) '.claude.json'
 
 function Link-ClaudeFiles {
     $sourceRoot = Join-Path $DotfilesDir 'claude/.claude'
@@ -52,11 +54,8 @@ function Merge-Json($current, $base) {
     }
 }
 
-# Claude rewrites its settings file at runtime, so merge instead of linking.
-function Merge-ClaudeSettings {
-    $base = Join-Path $DotfilesDir 'claude/settings.json'
-    $target = Join-Path $TargetDir 'settings.json'
-
+# Claude rewrites both files at runtime, so merge instead of linking.
+function Merge-JsonFile($base, $target) {
     $current = [ordered]@{}
     if ((Test-Path $target) -and (Get-Item $target).Length -gt 0) {
         $current = Get-Content $target -Raw | ConvertFrom-Json -AsHashtable
@@ -70,4 +69,5 @@ function Merge-ClaudeSettings {
 
 New-Item -ItemType Directory -Force $TargetDir | Out-Null
 Link-ClaudeFiles
-Merge-ClaudeSettings
+Merge-JsonFile (Join-Path $DotfilesDir 'claude/settings.json') (Join-Path $TargetDir 'settings.json')
+Merge-JsonFile (Join-Path $DotfilesDir 'claude/claude.json') $GlobalConfig
