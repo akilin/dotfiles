@@ -81,6 +81,8 @@
         "command": "bash ~/.claude/statusline-command.sh"
     },
     "theme": "dark",
+    "timeFormat": "24-hour",
+    "timeZone": "Europe/Kyiv",
     "worktree": {
         "bgIsolation": "none"
     }
