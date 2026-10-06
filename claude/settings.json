@@ -19,6 +19,7 @@
             "autoUpdate": true
         }
     },
+    "feedbackSurveyRate": 0,
     "modelSettings": {
         "claude-opus-5-5": {
             "effortLevel": "high"
