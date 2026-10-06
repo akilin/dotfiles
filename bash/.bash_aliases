@@ -1,5 +1,6 @@
 alias ap="ansible-playbook"
 alias d="docker"
 alias dc="docker compose"
+alias grep="grep --color=auto -i"
 alias k="kubectl"
 alias tf="terraform"
