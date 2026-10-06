@@ -25,13 +25,16 @@ fmt_tokens() {
 }
 left="$(fmt_tokens "$rounded")"
 
-# colors from Claude Code's dark theme: warning (same as "auto mode on") and error
+# colors from Claude Code's dark theme: success, warning (same as "auto mode on") and error
+GREEN=$'\033[38;2;78;186;101m'
 YELLOW=$'\033[38;2;255;193;7m'
 RED=$'\033[38;2;255;107;128m'
 RESET=$'\033[0m'
 
-tok_color=$YELLOW
-[ "$rounded" -ge 150000 ] && tok_color=$RED
+if   [ "$rounded" -lt 100000 ]; then tok_color=$GREEN
+elif [ "$rounded" -lt 150000 ]; then tok_color=$YELLOW
+else tok_color=$RED
+fi
 left_c="${tok_color}${left}${RESET}"
 
 # ---- right: model / effort / rate limits ----
