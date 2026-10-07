@@ -9,7 +9,7 @@
 	renames = copies
 	algorithm = histogram
 [branch]
-	autoSetupMerge = always
+	autoSetupMerge = simple
 	sort = -committerdate
 [push]
 	autoSetupRemote = true
