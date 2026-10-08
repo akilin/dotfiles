@@ -68,7 +68,8 @@
     },
     "statusLine": {
         "type": "command",
-        "command": "bash ~/.claude/statusline-command.sh"
+        "command": "bash ~/.claude/statusline-command.sh",
+        "refreshInterval": 60
     },
     "theme": "dark",
     "timeFormat": "24-hour",
