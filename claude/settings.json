@@ -52,6 +52,7 @@
         "anthropic-skills:built-in-browser": "off",
         "anthropic-skills:chrome-browser": "off",
         "anthropic-skills:computer-use": "off",
+        "anthropic-skills:deep-research": "off",
         "anthropic-skills:docs": "off",
         "anthropic-skills:docx": "off",
         "anthropic-skills:google-workspace": "off",
