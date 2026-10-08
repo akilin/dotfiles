@@ -7,6 +7,20 @@
       "bindings": {
         "ctrl+l": "command:clear"
       }
+    },
+    {
+      "context": "Select",
+      "bindings": {
+        "w": "select:previous",
+        "s": "select:next"
+      }
+    },
+    {
+      "context": "Tabs",
+      "bindings": {
+        "a": "tabs:previous",
+        "d": "tabs:next"
+      }
     }
   ]
 }
