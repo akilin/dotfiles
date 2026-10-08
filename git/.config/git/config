@@ -5,6 +5,9 @@
 [merge]
 	autoEdit = no
 	conflictStyle = diff3
+	autoStash = true
+[pull]
+	rebase = false
 [diff]
 	renames = copies
 	algorithm = histogram
