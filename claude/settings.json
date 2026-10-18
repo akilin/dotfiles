@@ -39,6 +39,7 @@
             "EnterWorktree",
             "ExitPlanMode",
             "ExitWorktree",
+            "mcp__ide__executeCode",
             "NotebookEdit",
             "PushNotification",
             "RemoteTrigger",
