@@ -48,6 +48,7 @@
         ]
     },
     "preferredNotifChannel": "ghostty",
+    "prefersReducedMotion": true,
     "promptSuggestionEnabled": false,
     "skillOverrides": {
         "anthropic-skills:built-in-browser": "off",
