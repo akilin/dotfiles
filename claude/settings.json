@@ -76,7 +76,7 @@
         "command": "bash ~/.claude/statusline-command.sh",
         "refreshInterval": 60
     },
-    "theme": "dark",
+    "theme": "custom:dark-light-highlight",
     "timeFormat": "24-hour",
     "timeZone": "Europe/Kyiv",
     "worktree": {
