@@ -76,9 +76,40 @@ merge_json() {
   printf '%s\n' "${merged}" > "${target}"
 }
 
+# Claude only installs plugins from settings.json in the background after it
+# starts, so they are missing from the first session. Install them up front.
+install_claude_plugins() {
+  local settings="${DOTFILES_DIR}/claude/settings.json"
+  local claude_bin
+  claude_bin="$(command -v claude || echo "${HOME}/.local/bin/claude")"
+  if [ ! -x "${claude_bin}" ]; then
+    echo "claude not found, skipping plugin install"
+    return 0
+  fi
+
+  local source plugin
+  jq -r '.extraKnownMarketplaces // {} | .[].source | .repo // .url // .path' "${settings}" |
+    while read -r source; do
+      echo "Adding marketplace '${source}'"
+      "${claude_bin}" plugin marketplace add "${source}" </dev/null ||
+        echo "Warning: could not add marketplace '${source}'" >&2
+    done
+  "${claude_bin}" plugin marketplace update </dev/null ||
+    echo "Warning: could not update marketplaces" >&2
+
+  jq -r '.enabledPlugins // {} | to_entries[] | select(.value == true) | .key | select(endswith("@builtin") | not)' "${settings}" |
+    while read -r plugin; do
+      echo "Installing plugin '${plugin}'"
+      { "${claude_bin}" plugin install "${plugin}" </dev/null &&
+        "${claude_bin}" plugin update "${plugin}" </dev/null; } ||
+        echo "Warning: could not install plugin '${plugin}'" >&2
+    done
+}
+
 ensure_installed stow
 ensure_installed jq
 stow_packages
 stow_claude_files
 merge_json "${DOTFILES_DIR}/claude/settings.json" "${CLAUDE_DIR}/settings.json"
 merge_json "${DOTFILES_DIR}/claude/claude.json" "${CLAUDE_GLOBAL_CONFIG}"
+install_claude_plugins
