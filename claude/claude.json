@@ -1,3 +1,4 @@
 {
-    "messageIdleNotifThresholdMs": 0
+    "messageIdleNotifThresholdMs": 0,
+    "diffSidebarOpen": false
 }
