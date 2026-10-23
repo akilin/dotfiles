@@ -49,7 +49,8 @@ week=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // e
 five_reset=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
 week_reset=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 
-# fmt_until RESETS_AT: time left until reset, at most two units, e.g. 1d19h, 2h33m, 15m45s, 45s
+# fmt_until RESETS_AT: time left until reset, at most two units, e.g. 1d19h, 2h33m, 15m, 45s
+# (seconds only shown when under a minute)
 # accepts epoch seconds or an ISO-8601 timestamp
 fmt_until() {
   [ -z "$1" ] && return
@@ -64,7 +65,7 @@ fmt_until() {
   d=$((left / 86400)) h=$((left % 86400 / 3600)) m=$((left % 3600 / 60)) s=$((left % 60))
   if   [ "$d" -gt 0 ]; then printf '%dd%dh' "$d" "$h"
   elif [ "$h" -gt 0 ]; then printf '%dh%dm' "$h" "$m"
-  elif [ "$m" -gt 0 ]; then printf '%dm%ds' "$m" "$s"
+  elif [ "$m" -gt 0 ]; then printf '%dm' "$m"
   else printf '%ds' "$s"
   fi
 }
