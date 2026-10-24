@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Entry point for VS Code devcontainer "dotfiles" feature.
-# Ensures GNU Stow and jq are available, symlinks every package folder in this
+# Ensures GNU Stow, jq and nano are available, symlinks every package folder in this
 # repo (e.g. "bash") into $HOME using stow, and sets up Claude's config dir.
 set -euo pipefail
 
@@ -49,6 +49,13 @@ stow_packages() {
     echo "Stowing '${package}' -> ${TARGET_DIR}"
     stow --dir="${DOTFILES_DIR}" --target="${TARGET_DIR}" --no-folding --restow "${package}"
   done
+}
+
+# Debian's default .bashrc only sources .bash_aliases, so hook in .bash_exports.
+source_bash_exports() {
+  local line='[ -f ~/.bash_exports ] && . ~/.bash_exports'
+  touch "${HOME}/.bashrc"
+  grep -qxF "${line}" "${HOME}/.bashrc" || printf '\n%s\n' "${line}" >> "${HOME}/.bashrc"
 }
 
 # Only claude/.claude is linked; the json files next to it are merged below.
@@ -108,7 +115,9 @@ install_claude_plugins() {
 
 ensure_installed stow
 ensure_installed jq
+ensure_installed nano
 stow_packages
+source_bash_exports
 stow_claude_files
 merge_json "${DOTFILES_DIR}/claude/settings.json" "${CLAUDE_DIR}/settings.json"
 merge_json "${DOTFILES_DIR}/claude/claude.json" "${CLAUDE_GLOBAL_CONFIG}"
