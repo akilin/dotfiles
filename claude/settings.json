@@ -20,6 +20,19 @@
         }
     },
     "feedbackSurveyRate": 0,
+    "hooks": {
+        "PreToolUse": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/block-dangerous-git.sh\""
+                    }
+                ]
+            }
+        ]
+    },
     "idleCompaction": false,
     "modelSettings": {
         "claude-opus-5-5": {
