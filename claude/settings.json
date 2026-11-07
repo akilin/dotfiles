@@ -59,13 +59,16 @@
             "RemoteTrigger",
             "ReportFindings",
             "ScheduleWakeup",
-            "SendFeedback"
+            "SendFeedback",
+            "SendToProject",
+            "SendToProjectContext"
         ]
     },
     "preferredNotifChannel": "ghostty",
     "prefersReducedMotion": true,
     "promptSuggestionEnabled": false,
     "skillOverrides": {
+        "anthropic-skills:artifact-emulator": "off",
         "anthropic-skills:built-in-browser": "off",
         "anthropic-skills:chrome-browser": "off",
         "anthropic-skills:computer-use": "off",
