@@ -70,8 +70,8 @@ fmt_until() {
   fi
 }
 
-# add_limit PCT RESETS_AT: append to limits (plain) and limits_c (red at 90% or more);
-# at 90% or more also shows time until reset
+# add_limit PCT RESETS_AT: append to limits (plain) and limits_c (red at 85% or more);
+# at 85% or more also shows time until reset
 limits=""
 limits_c=""
 add_limit() {
@@ -80,7 +80,7 @@ add_limit() {
   pct=$(printf '%.0f' "$1")
   lim="${pct}%"
   lim_c=$lim
-  if [ "$pct" -ge 90 ]; then
+  if [ "$pct" -ge 85 ]; then
     until=$(fmt_until "$2")
     [ -n "$until" ] && lim="$lim ($until)"
     lim_c="${RED}${lim}${RESET}"
