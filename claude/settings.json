@@ -56,7 +56,6 @@
             "EnterWorktree",
             "ExitPlanMode",
             "ExitWorktree",
-            "mcp__easel__chart",
             "mcp__ide__executeCode",
             "mcp__ide__getDiagnostics",
             "NotebookEdit",
